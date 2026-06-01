@@ -4,6 +4,8 @@
 
 **Desenvolvedor Web Fullstack · Manaus, AM**
 
+[![Portfolio](https://img.shields.io/badge/🌐%20braz.dev-6ee7b7?style=for-the-badge&logoColor=black)](https://perfil-profissional-tau.vercel.app)
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-brazjuniordev-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/brazjuniordev)
 [![Email](https://img.shields.io/badge/Email-brazjuniorxx@gmail.com-EA4335?style=flat&logo=gmail&logoColor=white)](mailto:brazjuniorxx@gmail.com)
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-92982511393-25D366?style=flat&logo=whatsapp&logoColor=white)](https://wa.me/5592982511393)
