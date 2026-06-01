@@ -68,13 +68,12 @@ Triagem, testes e manutenção de dispositivos de rede (ONUs, ONTs e roteadores)
 
 ---
 
-## GitHub Stats
+## GitHub
 
 <div align="center">
 
-![Stats](https://github-readme-stats.vercel.app/api?username=brxzjunior&show_icons=true&theme=dark&bg_color=0a0a0f&title_color=6ee7b7&icon_color=6ee7b7&text_color=e8e6f0&border_color=1a1a26&hide_border=false)
-
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=brxzjunior&layout=compact&theme=dark&bg_color=0a0a0f&title_color=6ee7b7&text_color=e8e6f0&border_color=1a1a26)
+[![GitHub brxzjunior](https://img.shields.io/badge/GitHub-brxzjunior-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/brxzjunior)
+![Profile views](https://komarev.com/ghpvc/?username=brxzjunior&color=6ee7b7&style=for-the-badge&label=VISITAS)
 
 </div>
 
