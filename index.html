@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Braz Junior — Desenvolvedor Fullstack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0f;
+      --bg2:      #12121a;
+      --bg3:      #1a1a26;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.13);
+      --text:     #e8e6f0;
+      --muted:    #7a7890;
+      --accent:   #6ee7b7;
+      --accent2:  #818cf8;
+      --accent3:  #f472b6;
+      --glow:     rgba(110,231,183,0.15);
+      --glow2:    rgba(129,140,248,0.12);
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'Instrument Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── GRID LINES ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── CURSOR GLOW ── */
+    #cursor-glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(110,231,183,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      transition: opacity 0.3s;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background: rgba(10,10,15,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(110,231,183,0.3);
+      padding: 8px 18px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: rgba(110,231,183,0.08);
+      border-color: var(--accent);
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 2;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 60px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-inner {
+      width: 100%;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.1s;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-name {
+      font-family: var(--font-head);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -3px;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-name .line2 {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(232,230,240,0.25);
+    }
+
+    .hero-role {
+      font-family: var(--font-head);
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 16px;
+      letter-spacing: -0.5px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.35s;
+    }
+
+    .hero-role .hl { color: var(--accent2); }
+
+    .hero-desc {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 520px;
+      margin-top: 24px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.5s;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 44px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.65s;
+    }
+
+    .btn-primary {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 400;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-primary:hover {
+      background: #86efca;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text);
+      background: transparent;
+      padding: 14px 28px;
+      border-radius: 4px;
+      border: 1px solid var(--border2);
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.04);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px;
+      left: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.9s;
+    }
+
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--muted);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleX(1); opacity: 0.4; }
+      50% { transform: scaleX(1.3); opacity: 1; }
+    }
+
+    /* Hero numbers */
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.8s;
+    }
+
+    .stat-num {
+      font-family: var(--font-head);
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -1px;
+    }
+
+    .stat-num span { color: var(--accent); }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* ── SKILLS ── */
+    #skills {
+      padding: 100px 0;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 64px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .skill-chip {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      transition: all 0.2s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-chip::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2px;
+      width: var(--level, 70%);
+      background: var(--chip-color, var(--accent));
+      transition: width 0.6s ease;
+    }
+
+    .skill-chip:hover {
+      border-color: var(--chip-color, var(--accent));
+      background: var(--bg3);
+      transform: translateY(-2px);
+    }
+
+    .skill-chip .chip-cat {
+      font-size: 10px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── PROJECTS ── */
+    #projects {
+      padding: 100px 0;
+    }
+
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .project-item {
+      background: var(--bg2);
+      padding: 40px 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-item:last-child { border-bottom: none; }
+
+    .project-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--p-accent, var(--accent));
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.3s ease;
+    }
+
+    .project-item:hover { background: var(--bg3); }
+    .project-item:hover::before { transform: scaleY(1); }
+
+    .project-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .project-name {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--tag-c, var(--accent));
+      background: rgba(110,231,183,0.07);
+      border: 1px solid rgba(110,231,183,0.15);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .project-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 8px;
+    }
+
+    .project-link {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+
+    .project-link:hover { color: var(--text); }
+
+    .project-link svg {
+      width: 14px; height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 100px 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .about-text p { margin-bottom: 16px; }
+
+    .about-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .about-highlight {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .about-highlight .accent { color: var(--accent); }
+
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .info-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+    }
+
+    .info-block-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .info-block-val {
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .lang-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lang-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .lang-name {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      min-width: 80px;
+    }
+
+    .lang-bar-bg {
+      flex: 1;
+      height: 3px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .lang-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--accent);
+      transition: width 1s ease;
+    }
+
+    .lang-level {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience {
+      padding: 100px 0;
+    }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .exp-item:last-child { border-bottom: 1px solid var(--border); }
+
+    .exp-period {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      padding-top: 4px;
+    }
+
+    .exp-company {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .exp-role {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .exp-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .exp-desc li {
+      margin-bottom: 8px;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .exp-desc li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 120px 0 80px;
+    }
+
+    .contact-inner {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-big {
+      font-family: var(--font-head);
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .contact-big span { color: var(--accent); }
+
+    .contact-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 14px 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .contact-link svg { width: 16px; height: 16px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 32px 60px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-made {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-made span { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      #hero { padding: 100px 24px 60px; }
+      .container { padding: 0 24px; }
+      .hero-stats { gap: 28px; flex-wrap: wrap; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .exp-item { grid-template-columns: 1fr; gap: 8px; }
+      .project-item { grid-template-columns: 1fr; padding: 28px 24px; }
+      .project-links { flex-direction: row; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+      .hero-scroll { left: 24px; }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    /* ── ACTIVE NAV ── */
+    .nav-links a.active { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-glow"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">braz<span>.</span>dev</a>
+    <ul class="nav-links">
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projetos</a></li>
+      <li><a href="#about">sobre</a></li>
+      <li><a href="#experience">exp.</a></li>
+    </ul>
+    <a href="mailto:brazjuniorxx@gmail.com" class="nav-cta">contato →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <p class="hero-tag">Desenvolvedor Web Fullstack · Manaus, AM</p>
+      <h1 class="hero-name">
+        Braz
+        <span class="line2">Junior</span>
+      </h1>
+      <p class="hero-role">
+        Construindo interfaces &amp; <span class="hl">APIs</span> modernas
+      </p>
+      <p class="hero-desc">
+        Desenvolvedor fullstack com foco em React, Node.js e criação de aplicações reais.
+        Apaixonado por código limpo, UX funcional e soluções que resolvem problemas de verdade.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">ver projetos</a>
+        <a href="mailto:brazjuniorxx@gmail.com" class="btn-secondary">enviar mensagem</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3<span>+</span></div>
+          <div class="stat-label">projetos fullstack</div>
+        </div>
+        <div>
+          <div class="stat-num">10<span>+</span></div>
+          <div class="stat-label">tecnologias</div>
+        </div>
+        <div>
+          <div class="stat-num">1<span>a</span></div>
+          <div class="stat-label">ano de experiência</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">aprendizado contínuo</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label reveal">tech stack</p>
+      <h2 class="section-title reveal reveal-delay-1">Ferramentas &amp;<br>Tecnologias</h2>
+      <div class="skills-grid">
+        <!-- Frontend -->
+        <div class="skill-chip reveal" style="--chip-color:#6ee7b7;--level:90%">
+          <span class="chip-cat">frontend</span>HTML5
+        </div>
+        <div class="skill-chip reveal reveal-delay-1" style="--chip-color:#6ee7b7;--level:85%">
+          <span class="chip-cat">frontend</span>CSS3
+        </div>
+        <div class="skill-chip reveal reveal-delay-2" style="--chip-color:#818cf8;--level:80%">
+          <span class="chip-cat">linguagem</span>JavaScript ES6+
+        </div>
+        <div class="skill-chip reveal reveal-delay-3" style="--chip-color:#818cf8;--level:75%">
+          <span class="chip-cat">frontend</span>React.js
+        </div>
+        <div class="skill-chip reveal" style="--chip-color:#818cf8;--level:70%">
+          <span class="chip-cat">build tool</span>Vite
+        </div>
+        <!-- Backend -->
+        <div class="skill-chip reveal reveal-delay-1" style="--chip-color:#f472b6;--level:70%">
+          <span class="chip-cat">backend</span>Node.js
+        </div>
+        <div class="skill-chip reveal reveal-delay-2" style="--chip-color:#f472b6;--level:65%">
+          <span class="chip-cat">backend</span>Express.js
+        </div>
+        <div class="skill-chip reveal reveal-delay-3" style="--chip-color:#f472b6;--level:60%">
+          <span class="chip-cat">backend</span>REST APIs
+        </div>
+        <!-- Data -->
+        <div class="skill-chip reveal" style="--chip-color:#fbbf24;--level:60%">
+          <span class="chip-cat">banco de dados</span>SQL / SQLite
+        </div>
+        <div class="skill-chip reveal reveal-delay-1" style="--chip-color:#6ee7b7;--level:75%">
+          <span class="chip-cat">integração</span>Axios / Fetch
+        </div>
+        <!-- Tools -->
+        <div class="skill-chip reveal reveal-delay-2" style="--chip-color:#7c3aed;--level:80%">
+          <span class="chip-cat">versionamento</span>Git &amp; GitHub
+        </div>
+        <div class="skill-chip reveal reveal-delay-3" style="--chip-color:#7c3aed;--level:65%">
+          <span class="chip-cat">api client</span>Thunder Client
+        </div>
+        <div class="skill-chip reveal" style="--chip-color:#7c3aed;--level:60%">
+          <span class="chip-cat">deploy</span>Netlify
+        </div>
+        <div class="skill-chip reveal reveal-delay-1" style="--chip-color:#6ee7b7;--level:55%">
+          <span class="chip-cat">browser</span>Web Speech API
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label reveal">projetos selecionados</p>
+      <h2 class="section-title reveal reveal-delay-1">O que eu<br>construí</h2>
+      <div class="projects-list reveal reveal-delay-2">
+
+        <!-- FrioOS -->
+        <div class="project-item" style="--p-accent:#6ee7b7">
+          <div>
+            <p class="project-num">01 · projeto de extensão</p>
+            <h3 class="project-name">FrioOS</h3>
+            <p class="project-desc">
+              Sistema web fullstack para técnicos autônomos de refrigeração (MEI) gerenciarem
+              clientes, ordens de serviço e histórico de atendimentos — substituindo papel e
+              planilhas por uma solução digital organizada e profissional.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">React.js</span>
+              <span class="project-tag">Node.js</span>
+              <span class="project-tag">Express.js</span>
+              <span class="project-tag">SQLite</span>
+              <span class="project-tag">Axios</span>
+              <span class="project-tag">Vite</span>
+            </div>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/brxzjunior/FrioOS" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Weather -->
+        <div class="project-item" style="--p-accent:#818cf8">
+          <div>
+            <p class="project-num">02 · app de clima</p>
+            <h3 class="project-name">Wea-ther</h3>
+            <p class="project-desc">
+              Aplicação frontend que fornece dados climáticos em tempo real — temperatura,
+              umidade e condições do tempo para qualquer cidade — com interface responsiva
+              e reconhecimento de voz via Web Speech API.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag" style="--tag-c:#818cf8;background:rgba(129,140,248,0.07);border-color:rgba(129,140,248,0.2)">JavaScript</span>
+              <span class="project-tag" style="--tag-c:#818cf8;background:rgba(129,140,248,0.07);border-color:rgba(129,140,248,0.2)">REST API</span>
+              <span class="project-tag" style="--tag-c:#818cf8;background:rgba(129,140,248,0.07);border-color:rgba(129,140,248,0.2)">Fetch API</span>
+              <span class="project-tag" style="--tag-c:#818cf8;background:rgba(129,140,248,0.07);border-color:rgba(129,140,248,0.2)">Web Speech API</span>
+              <span class="project-tag" style="--tag-c:#818cf8;background:rgba(129,140,248,0.07);border-color:rgba(129,140,248,0.2)">Netlify</span>
+            </div>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/brxzjunior/Weather" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Dev-Notes -->
+        <div class="project-item" style="--p-accent:#f472b6">
+          <div>
+            <p class="project-num">03 · gerenciador de notas</p>
+            <h3 class="project-name">Dev-Notes</h3>
+            <p class="project-desc">
+              Aplicação web para criação e gerenciamento de notas com interface intuitiva
+              e responsiva. Utiliza manipulação dinâmica do DOM, eventos JavaScript e
+              LocalStorage para persistência dos dados no navegador.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag" style="--tag-c:#f472b6;background:rgba(244,114,182,0.07);border-color:rgba(244,114,182,0.2)">JavaScript</span>
+              <span class="project-tag" style="--tag-c:#f472b6;background:rgba(244,114,182,0.07);border-color:rgba(244,114,182,0.2)">HTML5</span>
+              <span class="project-tag" style="--tag-c:#f472b6;background:rgba(244,114,182,0.07);border-color:rgba(244,114,182,0.2)">CSS3</span>
+              <span class="project-tag" style="--tag-c:#f472b6;background:rgba(244,114,182,0.07);border-color:rgba(244,114,182,0.2)">DOM</span>
+              <span class="project-tag" style="--tag-c:#f472b6;background:rgba(244,114,182,0.07);border-color:rgba(244,114,182,0.2)">LocalStorage</span>
+            </div>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/brxzjunior/Dev-Notes" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label reveal">sobre mim</p>
+      <div class="about-grid">
+        <div>
+          <p class="about-highlight reveal">
+            Desenvolvedor em construção,<br>
+            com <span class="accent">projetos reais</span><br>
+            no currículo.
+          </p>
+          <div class="about-text reveal reveal-delay-1">
+            <p>
+              Sou <strong>Braz Junior</strong>, desenvolvedor web fullstack de Manaus-AM, com 25 anos.
+              Estou cursando Análise e Desenvolvimento de Sistemas pela Descomplica Faculdade (5º período)
+              e construindo aplicações modernas desde o front até o banco de dados.
+            </p>
+            <p>
+              Meu projeto mais completo, o <strong>FrioOS</strong>, foi desenvolvido como projeto de
+              extensão universitária para resolver um problema real de técnicos autônomos de refrigeração —
+              o tipo de trabalho que vai além do exercício de curso.
+            </p>
+            <p>
+              Estou sempre aprendendo, atualmente aprofundando conhecimentos em
+              <strong>cibersegurança</strong> e expandindo minha stack para TypeScript e Next.js.
+            </p>
+          </div>
+        </div>
+        <div class="about-right reveal reveal-delay-2">
+          <div class="info-block">
+            <div class="info-block-label">localização</div>
+            <div class="info-block-val">Manaus, Amazonas — BR</div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-label">graduação</div>
+            <div class="info-block-val">Análise e Desenvolvimento de Sistemas<br>
+              <span style="color:var(--muted);font-size:14px">Descomplica · 2024 – cursando</span>
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-label">idiomas</div>
+            <div class="lang-bars">
+              <div class="lang-row">
+                <span class="lang-name">Português</span>
+                <div class="lang-bar-bg"><div class="lang-bar-fill" style="width:100%;background:var(--accent)"></div></div>
+                <span class="lang-level">nativo</span>
+              </div>
+              <div class="lang-row">
+                <span class="lang-name">Inglês</span>
+                <div class="lang-bar-bg"><div class="lang-bar-fill" style="width:55%;background:var(--accent2)"></div></div>
+                <span class="lang-level">intermediário</span>
+              </div>
+              <div class="lang-row">
+                <span class="lang-name">Espanhol</span>
+                <div class="lang-bar-bg"><div class="lang-bar-fill" style="width:25%;background:var(--accent3)"></div></div>
+                <span class="lang-level">básico</span>
+              </div>
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-label">atualmente estudando</div>
+            <div class="info-block-val" style="font-family:var(--font-mono);font-size:13px;color:var(--accent)">
+              Cibersec Box · Dev Web Udemy
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <p class="section-label reveal">experiência</p>
+      <h2 class="section-title reveal reveal-delay-1">Trajetória</h2>
+      <div class="exp-item reveal reveal-delay-2">
+        <div class="exp-period">
+          dez/2023 — mar/2025<br>
+          <span style="font-size:11px;opacity:0.6">1 ano e 3 meses</span>
+        </div>
+        <div>
+          <div class="exp-company">Wire Telecom</div>
+          <div class="exp-role">Auxiliar de Logística</div>
+          <ul class="exp-desc">
+            <li>Triagem, testes, limpeza e manutenção de dispositivos de rede para reuso (ONUs, ONTs e roteadores)</li>
+            <li>Processo de validação com atualização de firmware, configuração de PPPoE e testes de banda larga</li>
+            <li>Desenvolvimento de raciocínio técnico, diagnóstico de hardware e atenção a processos — habilidades que complementam a carreira em desenvolvimento</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner reveal">
+        <h2 class="contact-big">Vamos<br><span>conversar</span></h2>
+        <p class="contact-sub">
+          Aberto a oportunidades de estágio, emprego junior ou freelance.
+          Entre em contato e vamos construir algo juntos.
+        </p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:brazjuniorxx@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            brazjuniorxx@gmail.com
+          </a>
+          <a class="contact-link" href="https://linkedin.com/in/brazjuniordev" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a class="contact-link" href="https://github.com/brxzjunior" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">© 2025 Braz Junior · Todos os direitos reservados</span>
+    <span class="footer-made">feito com <span>♥</span> em Manaus, AM</span>
+  </footer>
+
+  <script>
+    // Cursor glow
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Active nav link
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const navObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => navObs.observe(s));
+
+    // Phone number: +55 92 98251-1393
+    // (not included publicly for privacy — add manually if desired)
+  </script>
+</body>
+</html>
