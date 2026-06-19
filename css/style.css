@@ -1,18 +1,18 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #0c0a09;
-  --bg2:      #1c1917;
-  --bg3:      #292524;
+  --bg:       #050a05;
+  --bg2:      #0d150d;
+  --bg3:      #162016;
   --border:   rgba(255,255,255,0.07);
   --border2:  rgba(255,255,255,0.13);
-  --text:     #fafaf9;
-  --muted:    #78716c;
-  --accent:   #f97316;
-  --accent2:  #facc15;
-  --accent3:  #fb923c;
-  --glow:     rgba(249,115,22,0.15);
-  --glow2:    rgba(250,204,21,0.12);
+  --text:     #f0fdf0;
+  --muted:    #6b7f6b;
+  --accent:   #4ade80;
+  --accent2:  #a3e635;
+  --accent3:  #86efac;
+  --glow:     rgba(74,222,128,0.15);
+  --glow2:    rgba(163,230,53,0.12);
   --font-head: 'Syne', sans-serif;
   --font-body: 'Instrument Sans', sans-serif;
   --font-mono: 'DM Mono', monospace;
@@ -60,7 +60,7 @@ body::after {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(249,115,22,0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(74,222,128,0.07) 0%, transparent 70%);
   pointer-events: none;
   transform: translate(-50%, -50%);
   z-index: 1;
@@ -76,7 +76,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 20px 60px;
-  background: rgba(12,10,9,0.85);
+  background: rgba(5,10,5,0.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
@@ -114,14 +114,14 @@ nav {
   font-size: 13px;
   color: var(--accent);
   text-decoration: none;
-  border: 1px solid rgba(249,115,22,0.3);
+  border: 1px solid rgba(74,222,128,0.3);
   padding: 8px 18px;
   border-radius: 4px;
   transition: all 0.2s;
 }
 
 .nav-cta:hover {
-  background: rgba(249,115,22,0.08);
+  background: rgba(74,222,128,0.08);
   border-color: var(--accent);
 }
 
@@ -234,7 +234,7 @@ section {
 }
 
 .btn-primary:hover {
-  background: #fdba74;
+  background: #86efac;
   transform: translateY(-2px);
 }
 
@@ -464,8 +464,8 @@ section {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--tag-c, var(--accent));
-  background: rgba(249,115,22,0.07);
-  border: 1px solid rgba(249,115,22,0.18);
+  background: rgba(74,222,128,0.07);
+  border: 1px solid rgba(74,222,128,0.18);
   padding: 4px 10px;
   border-radius: 4px;
 }
